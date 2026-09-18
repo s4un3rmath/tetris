@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RETRO TETRIS</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="scanlines"></div>
+    <div class="crt-overlay"></div>
+
+    <header>
+        <div class="logo">
+            <h1>RETRO <span>TETRIS</span></h1>
+        </div>
+        <nav>
+            <a href="#jogar">JOGAR</a>
+            <a href="#sobre">SOBRE</a>
+            <a href="#controles">CONTROLES</a>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Hero -->
+        <section class="hero">
+            <div class="hero-content">
+                <h2>O CLASSICO DOS<br>BLOCOS CAINDO</h2>
+                <p>Empilhe, gire e complete linhas. Um jogo inspirado no lendario Tetris de 1984. Desafie seus reflexos e bata seu recorde!</p>
+                <a href="#jogar" class="btn-play">JOGAR AGORA</a>
+            </div>
+            <div class="hero-visual">
+                <div class="pixel-art">
+                    <div class="pixel-row">
+                        <span class="p c1"></span><span class="p c1"></span><span class="p c1"></span><span class="p c1"></span>
+                    </div>
+                    <div class="pixel-row">
+                        <span class="p c2"></span><span class="p c2"></span>
+                    </div>
+                    <div class="pixel-row">
+                        <span class="p c3"></span><span class="p c3"></span><span class="p c3"></span>
+                    </div>
+                    <div class="pixel-row">
+                        <span class="p c4"></span><span class="p c4"></span>
+                        <span class="p empty"></span>
+                        <span class="p c5"></span><span class="p c5"></span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Game -->
+        <section id="jogar" class="game-section">
+            <h2 class="section-title">- JOGUE AGORA -</h2>
+            
+            <div class="game-container">
+                <div class="side-panel left-panel">
+                    <div class="panel-box">
+                        <h3>PROXIMA</h3>
+                        <canvas id="next-piece" width="120" height="120"></canvas>
+                    </div>
+                    <div class="panel-box">
+                        <h3>PONTOS</h3>
+                        <p id="score">000000</p>
+                    </div>
+                    <div class="panel-box">
+                        <h3>LINHAS</h3>
+                        <p id="lines">000</p>
+                    </div>
+                    <div class="panel-box">
+                        <h3>NIVEL</h3>
+                        <p id="level">01</p>
+                    </div>
+                </div>
+
+                <div class="game-board-wrapper">
+                    <canvas id="tetris" width="300" height="600"></canvas>
+                    <div id="overlay" class="overlay">
+                        <div class="overlay-content">
+                            <h2 id="overlay-title">RETRO TETRIS</h2>
+                            <p id="overlay-msg">PRESSIONE ESPACO OU CLIQUE</p>
+                            <button id="start-btn" class="btn-start">INICIAR</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="side-panel right-panel">
+                    <div class="panel-box">
+                        <h3>RECORDE</h3>
+                        <p id="highscore">000000</p>
+                    </div>
+                    <div class="panel-box controls-box">
+                        <h3>CONTROLES</h3>
+                        <ul>
+                            <li><kbd>&larr;</kbd> <kbd>&rarr;</kbd> MOVER</li>
+                            <li><kbd>&darr;</kbd> DESCER</li>
+                            <li><kbd>&uarr;</kbd> GIRAR</li>
+                            <li><kbd>SPC</kbd> QUEDA</li>
+                            <li><kbd>P</kbd> PAUSAR</li>
+                        </ul>
+                    </div>
+                    <div class="panel-box">
+                        <button id="pause-btn" class="btn-secondary" disabled>PAUSAR</button>
+                        <button id="restart-btn" class="btn-secondary">REINICIAR</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About -->
+        <section id="sobre" class="about-section">
+            <h2 class="section-title">- SOBRE O JOGO -</h2>
+            <div class="about-grid">
+                <div class="about-card">
+                    <h3>CLASSICO</h3>
+                    <p>Inspirado no iconico Tetris de 1984, criado por Alexey Pajitnov. A mecanica simples e viciante que conquistou o mundo.</p>
+                </div>
+                <div class="about-card">
+                    <h3>VISUAL RETRO</h3>
+                    <p>Design inspirado nos arcades e consoles de 8-bits. Cores vivas, fontes pixeladas e atmosfera nostalgica dos anos 80.</p>
+                </div>
+                <div class="about-card">
+                    <h3>DESAFIO</h3>
+                    <p>Complete linhas, suba de nivel e tente bater seu recorde pessoal. A velocidade aumenta a cada nivel!</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Controls -->
+        <section id="controles" class="controls-section">
+            <h2 class="section-title">- COMO JOGAR -</h2>
+            <div class="controls-grid">
+                <div class="control-item">
+                    <span class="key">&larr; &rarr;</span>
+                    <p>Mova a peca para os lados</p>
+                </div>
+                <div class="control-item">
+                    <span class="key">&uarr;</span>
+                    <p>Gire a peca</p>
+                </div>
+                <div class="control-item">
+                    <span class="key">&darr;</span>
+                    <p>Acelere a descida</p>
+                </div>
+                <div class="control-item">
+                    <span class="key">ESPACO</span>
+                    <p>Queda instantanea</p>
+                </div>
+                <div class="control-item">
+                    <span class="key">P</span>
+                    <p>Pausar / Continuar</p>
+                </div>
+            </div>
+            <p class="tip">DICA: Complete 4 linhas de uma vez (TETRIS) para pontuacao maxima!</p>
+        </section>
+    </main>
+
+    <footer>
+        <p>RETRO TETRIS 2026 - INSPIRADO NO CLASSICO TETRIS</p>
+        <p class="disclaimer">PROJETO NAO-OFICIAL PARA FINS EDUCACIONAIS E DE ENTRETENIMENTO</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
