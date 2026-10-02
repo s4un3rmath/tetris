@@ -1,10 +1,8 @@
-// ===== RETRO TETRIS - Jogo Completo =====
 
 const COLS = 10;
 const ROWS = 20;
 const BLOCK_SIZE = 30;
 
-// Cores retrô das peças
 const COLORS = [
     null,
     '#00d9ff', // I - Cyan
@@ -16,7 +14,6 @@ const COLORS = [
     '#ff9f1c'  // L - Orange
 ];
 
-// Formas das peças (matriz de rotação)
 const SHAPES = [
     null,
     // I
@@ -70,7 +67,7 @@ const SHAPES = [
     ]
 ];
 
-// Elementos DOM
+
 const canvas = document.getElementById('tetris');
 const ctx = canvas.getContext('2d');
 const nextCanvas = document.getElementById('next-piece');
@@ -87,7 +84,6 @@ const startBtn = document.getElementById('start-btn');
 const pauseBtn = document.getElementById('pause-btn');
 const restartBtn = document.getElementById('restart-btn');
 
-// Estado do jogo
 let board = [];
 let current = null;
 let next = null;
@@ -110,22 +106,20 @@ function pad(num, size) {
 
 highscoreEl.textContent = pad(highscore, 6);
 
-// ===== FUNÇÕES DE TABULEIRO =====
 function createBoard() {
     return Array.from({ length: ROWS }, () => Array(COLS).fill(0));
 }
 
 function drawBlock(ctx, x, y, color, size = BLOCK_SIZE) {
-    // Bloco sólido estilo 8-bit
+
     ctx.fillStyle = color;
     ctx.fillRect(x * size + 1, y * size + 1, size - 2, size - 2);
 
-    // Highlight superior/esquerda (pixel art)
     ctx.fillStyle = 'rgba(255,255,255,0.35)';
     ctx.fillRect(x * size + 1, y * size + 1, size - 2, 3);
     ctx.fillRect(x * size + 1, y * size + 1, 3, size - 2);
 
-    // Sombra inferior/direita
+
     ctx.fillStyle = 'rgba(0,0,0,0.4)';
     ctx.fillRect(x * size + size - 4, y * size + 1, 3, size - 2);
     ctx.fillRect(x * size + 1, y * size + size - 4, size - 2, 3);
@@ -151,7 +145,6 @@ function drawBoard() {
         ctx.stroke();
     }
 
-    // Blocos fixos
     for (let y = 0; y < ROWS; y++) {
         for (let x = 0; x < COLS; x++) {
             if (board[y][x]) {
@@ -160,7 +153,7 @@ function drawBoard() {
         }
     }
 
-    // Peça atual
+
     if (current) {
         const shape = SHAPES[current.type][current.rotation];
         for (let y = 0; y < 4; y++) {
@@ -171,7 +164,6 @@ function drawBoard() {
             }
         }
         
-        // Ghost piece (sombra de queda)
         const ghostY = getGhostY();
         ctx.globalAlpha = 0.25;
         for (let y = 0; y < 4; y++) {
@@ -224,7 +216,6 @@ function drawNext() {
     }
 }
 
-// ===== LÓGICA DAS PEÇAS =====
 function randomPiece() {
     return Math.floor(Math.random() * 7) + 1;
 }
@@ -282,7 +273,7 @@ function mergePiece() {
 }
 
 function clearLines() {
-    // Encontra as linhas completas
+   
     const fullRows = [];
     for (let y = 0; y < ROWS; y++) {
         if (board[y].every(cell => cell !== 0)) {
@@ -296,26 +287,26 @@ function clearLines() {
         return;
     }
 
-    // Inicia o efeito de flash
+
     isClearing = true;
     let flashCount = 0;
-    const maxFlashes = 6; // quantas vezes pisca
+    const maxFlashes = 6; 
 
     function flashEffect() {
         flashCount++;
 
-        // Alterna entre branco e a cor original
+
         const flashOn = flashCount % 2 === 1;
 
         drawBoard();
 
-        // Desenha o flash nas linhas completas
+   
         if (flashOn) {
             ctx.fillStyle = '#ffffff';
             fullRows.forEach(y => {
                 ctx.fillRect(0, y * BLOCK_SIZE, canvas.width, BLOCK_SIZE);
             });
-            // Borda amarela no flash (efeito retrô)
+  
             ctx.fillStyle = '#ffe66d';
             fullRows.forEach(y => {
                 ctx.fillRect(0, y * BLOCK_SIZE, canvas.width, 3);
@@ -324,24 +315,24 @@ function clearLines() {
         }
 
         if (flashCount < maxFlashes) {
-            setTimeout(flashEffect, 60); // velocidade do piscar
+            setTimeout(flashEffect, 60); 
         } else {
-            // Remove as linhas de verdade
+          
             let cleared = fullRows.length;
 
-            // Remove de baixo para cima para não bagunçar os índices
+        
             for (let i = fullRows.length - 1; i >= 0; i--) {
                 board.splice(fullRows[i], 1);
                 board.unshift(Array(COLS).fill(0));
             }
 
-            // Pontuação clássica
+           
             const points = [0, 100, 300, 500, 800];
             score += points[cleared] * level;
             lines += cleared;
 
             isClearing = false;
-            updateUI(); // updateUI cuida do nível e velocidade
+            updateUI(); 
             spawnPiece();
             drawBoard();
         }
@@ -362,10 +353,10 @@ function hardDrop() {
 function lockPiece() {
     if (isClearing) return;
     mergePiece();
-    clearLines(); // clearLines cuida de spawnPiece e updateUI
+    clearLines(); 
 }
 
-// ===== CONTROLES =====
+
 function move(dx) {
     if (!isPlaying || isPaused || isClearing) return;
     if (!collision(current.x + dx, current.y, current.rotation)) {
@@ -388,7 +379,7 @@ function rotate() {
     if (!isPlaying || isPaused || isClearing) return;
     const newRot = (current.rotation + 1) % 4;
     
-    // Wall kick simples
+
     const kicks = [0, -1, 1, -2, 2];
     for (const kick of kicks) {
         if (!collision(current.x + kick, current.y, newRot)) {
@@ -416,13 +407,13 @@ function togglePause() {
     }
 }
 
-// ===== UI =====
+
 function updateUI() {
-    // A cada 1000 pontos sobe de nível e aumenta a velocidade
+  
     const newLevel = Math.floor(score / 1000) + 1;
     if (newLevel > level) {
         level = newLevel;
-        // Quanto maior o nível, mais rápido (mínimo 80ms)
+   
         dropInterval = Math.max(80, 1000 - (level - 1) * 90);
     }
 
@@ -468,11 +459,9 @@ function startGame() {
     gameLoop(performance.now());
 }
 
-// ===== GAME LOOP =====
 function gameLoop(timestamp) {
     if (!isPlaying || isPaused) return;
 
-    // Não desce peça enquanto está no efeito de limpar linha
     if (!isClearing && timestamp - lastDrop > dropInterval) {
         if (!collision(current.x, current.y + 1, current.rotation)) {
             current.y++;
@@ -482,14 +471,12 @@ function gameLoop(timestamp) {
         lastDrop = timestamp;
     }
 
-    // Só redesenha se não estiver no meio do flash
     if (!isClearing) {
         drawBoard();
     }
     animationId = requestAnimationFrame(gameLoop);
 }
 
-// ===== EVENTOS =====
 document.addEventListener('keydown', (e) => {
     if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' '].includes(e.key)) {
         e.preventDefault();
